@@ -37,3 +37,44 @@
 ; 这样可以方便做到尾递归优化；而将if改写为常规过程后，
 ; 由于解释器是应用序求值的，需要先将参数的值都求出来，
 ; 第二个参数的值是求不完的，这样会造成栈溢出
+
+; 练习1.7
+; 对很小的数，很容易满足good-enough?，因此迭代
+; 几次以后就停止了，误差很大，(sqrt 0.00001) ->
+; 0.03135649010771716
+; 对很大的数，两个大数之差的精度达不到0.001，迭代
+; 会一直进行下去，永不停止
+(define (sqrt-iter guess x)
+  (if (good-enough? guess (improve guess x))
+      (improve guess x)
+      (sqrt-iter (improve guess x)
+                 x)))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (good-enough? old-guess new-guess)
+  (< (/ (abs (- old-guess new-guess))
+        old-guess)
+     0.001))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
+
+; 练习1.8
+(define (cbrt-iter guess x)
+  (if (good-enough? guess (improve-cbrt guess x))
+      (improve-cbrt guess x)
+      (cbrt-iter (improve-cbrt guess x)
+                 x)))
+
+(define (square x) (* x x))
+
+(define (improve-cbrt guess x)
+  (/ (+ (/ x (square guess)) (* 2 guess)) 3))
+
+(define (cbrt x)
+  (cbrt-iter 1.0 x))
