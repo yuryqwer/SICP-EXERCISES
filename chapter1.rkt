@@ -126,3 +126,65 @@
 ; (f n) -> 2n
 ; (g n) -> 2^n
 ; (h n) -> 2的2的...2次方（n个2）
+
+;;;;;;;;;;;;;;;;;;;; 练习1.11 ;;;;;;;;;;;;;;;;;;;;
+; 递归计算过程:
+(define (f n)
+  (if (< n 3)
+      n
+      (+ (f (- n 1))
+         (* 2 (f (- n 2)))
+         (* 3 (f (- n 3))))))
+
+; 迭代计算过程:
+(define (f n)
+  (if (< n 3)
+      n
+      (f-iter 2 1 0 n)))
+
+(define (f-iter a b c count)
+  (if (< count 3)
+      a
+      (f-iter (+ a (* 2 b) (* 3 c))
+              a
+              b
+              (- count 1))))
+
+;;;;;;;;;;;;;;;;;;;; 练习1.12 ;;;;;;;;;;;;;;;;;;;;
+(define (pascal-triangle i j)
+  (if (or (= j 1) (= i j))
+      1
+      (+ (pascal-triangle (- i 1) (- j 1))
+         (pascal-triangle (- i 1) j))))
+
+;;;;;;;;;;;;;;;;;;;; 练习1.13 ;;;;;;;;;;;;;;;;;;;;
+; 略
+
+;;;;;;;;;;;;;;;;;;;; 练习1.14 ;;;;;;;;;;;;;;;;;;;;
+; 略
+
+;;;;;;;;;;;;;;;;;;;; 练习1.15 ;;;;;;;;;;;;;;;;;;;;
+; a)
+; (sine 12.15) ->
+; (p (sine 4.05)) ->
+; (p (p (sine 1.35))) ->
+; (p (p (p (sine 0.45)))) ->
+; (p (p (p (p (sine 0.15))))) ->
+; (p (p (p (p (p (sine 0.05))))))
+; p被使用5次
+
+; b)
+; 空间和时间复杂度都为Θ(log a)
+
+;;;;;;;;;;;;;;;;;;;; 练习1.16 ;;;;;;;;;;;;;;;;;;;;
+(define (fast-expt-iter b n a)
+  (cond ((= n 0) a)
+        ((even? n) (fast-expt-iter (square b)
+                                   (/ n 2)
+                                   a))
+        (else (fast-expt-iter b
+                              (- n 1)
+                              (* b a)))))
+
+(define (fast-expt b n)
+  (fast-expt-iter b n 1))
