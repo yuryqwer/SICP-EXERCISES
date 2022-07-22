@@ -188,3 +188,27 @@
 
 (define (fast-expt b n)
   (fast-expt-iter b n 1))
+
+;;;;;;;;;;;;;;;;;;;; 练习1.17 ;;;;;;;;;;;;;;;;;;;;
+(define (double x) (* 2 x))
+
+(define (halve x) (/ x 2))
+
+(define (fast-multi a b)
+  (cond ((= b 0) 0)
+        ((even? b) (fast-multi (double a)
+                               (halve b)))
+        (else (+ a (fast-multi a (- b 1))))))
+
+;;;;;;;;;;;;;;;;;;;; 练习1.18 ;;;;;;;;;;;;;;;;;;;;
+(define (fast-multi-iter a b c)
+  (cond ((= b 0) c)
+        ((even? b) (fast-multi-iter (double a)
+                                    (halve b)
+                                    c))
+        (else (fast-multi-iter a
+                               (- b 1)
+                               (+ a c)))))
+
+(define (fast-multi a b)
+  (fast-multi-iter a b 0))
